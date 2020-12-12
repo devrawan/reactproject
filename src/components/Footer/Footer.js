@@ -1,4 +1,4 @@
-import React from 'react';
+import React  , {useState,useEffect}  from 'react';
 import {Button} from '../../globalStyle';
 import {FaFacebook,FaInstagram,FaYoutube,FaTwitter,FaLinkedin} from 'react-icons/fa';
 import {FooterContainer,
@@ -19,13 +19,48 @@ import {FooterContainer,
     WebsiteRights,
     SocialIcons,
     SocialIconLink,
-
-
 }from './FooterElements';
 
-
+import * as yup from 'yup';
 
 const Footer = () => {
+
+  const [usernamee , setusernamee] = useState("");
+  const [emaill,setemaill]= useState("");
+
+   const fun = (e) => {
+    const _val = e.target.value;
+    const _nam = e.target.name;
+    if(_nam=="usernamee"){
+        setusernamee(_val)
+    }else if(_nam=="emaill"){
+        setemaill(_val)
+    }
+    }
+
+
+     const handleSubmit = (e) => {
+      e.preventDefault();
+      const registerschema = yup.object().shape({
+         emaill : yup.string().email().required(),
+          usernamee: yup.string().required(),
+         
+      });
+      registerschema.validate({emaill,usernamee},{abortEarly:false}).then(data =>{
+          console.log("valid")
+          console.log(data)
+           
+
+
+
+
+      }).catch((err) =>{
+          console.log("invalid")      
+          console.log(err)
+      })
+  }
+
+
 
     return (
         <>
@@ -37,9 +72,12 @@ const Footer = () => {
                 <FooterSubText>
                 You can unsubscribe at any time.
                 </FooterSubText>
-                <Form>
-                 <FormInput name="email" type="email" placeholder="Your Email"/>
-                     <Button fontBig>Subscribe</Button>
+             
+                <Form  action="#" onSubmit={handleSubmit}>
+                 <FormInput name="usernamee" type="text" placeholder="Your username" onChange={fun} value={usernamee}/>
+                 <FormInput name="emaill" type="email" placeholder="Your Email" onChange={fun} value={emaill}/>
+
+                     <Button type="submit"  fontBig>Subscribe</Button>
                 </Form>
             </FooterSubscription>
 
